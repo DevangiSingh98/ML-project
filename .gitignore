@@ -31,3 +31,8 @@ datasets/
 
 # Huge outputs exceeding GitHub file size limits (>100MB)
 outputs/predictions/phase_d_calibrated_predictions.csv
+
+# Temporary / cache files and binary pickles
+scratch/
+*.pkl
+
