@@ -1,0 +1,4 @@
+condition,condition_label,channels_retained,pct_channels_retained,pct_channels_removed,features_count,pooled_accuracy,pooled_balanced_accuracy,pooled_macro_f1,pooled_margin_accuracy,subject_acc_mean,subject_acc_std,subject_bal_acc_mean,subject_bal_acc_std,subject_f1_mean,subject_f1_std,delta_pooled_acc_pp,delta_pooled_f1_pp,rule_agreement
+all_62,All 62 Channels (Baseline),62,100.0,0.0,310,0.391883,0.392975,0.394354,0.395263,0.391883,0.096254,0.392975,0.095352,0.325344,0.126845,0.0,0.0,0.9516
+corr_stab_32,32 Corrected Stability Channels,32,51.61,48.39,160,0.381344,0.38593,0.383672,0.375462,0.381344,0.088591,0.38593,0.085477,0.330414,0.120177,-1.054,-1.068,0.9684
+pred_32,32 Predictive Importance Channels,32,51.61,48.39,160,0.393799,0.39634,0.395867,0.39002,0.393799,0.087376,0.39634,0.081735,0.34497,0.117196,0.192,0.151,0.9507

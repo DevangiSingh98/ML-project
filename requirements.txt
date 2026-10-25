@@ -1,0 +1,12 @@
+# Core scientific environment dependencies (verified installed in active Python 3.14 environment)
+numpy>=2.4.3
+scipy>=1.17.1
+scikit-learn>=1.8.0
+pandas>=2.3.3
+matplotlib>=3.10.8
+pyyaml>=6.0.3
+openpyxl>=3.1.5
+psutil>=7.2.2
+
+# Testing dependency (NOT yet installed - pending user authorization)
+pytest>=8.0.0

@@ -1,0 +1,52 @@
+{
+  "audit_timestamp": "2026-10-21T01:56:01.247156",
+  "verdict": "PASS WITH LIMITATIONS",
+  "summary": "Baseline discrepancy between Phase B and Phase D is 100% resolved and traced to SVC.predict (one-vs-one voting) vs decision_function continuous margin argmax. Zero leakage confirmed. 29/29 unit tests pass.",
+  "baseline_discrepancy": {
+    "phase_b_accuracy": 0.3918829008649368,
+    "phase_d_all_62_uncal_accuracy": 0.3952628077178975,
+    "accuracy_difference": 0.0033799068529607,
+    "total_samples": 37575,
+    "identical_predictions_count": 35758,
+    "identical_predictions_percentage": 95.1643379906853,
+    "mismatched_predictions_count": 1817,
+    "mismatched_predictions_percentage": 4.835662009314704,
+    "phase_b_correct_on_mismatches": 410,
+    "phase_d_correct_on_mismatches": 537,
+    "net_correct_difference": 127,
+    "root_cause": "Decision rule difference: Phase B utilized LibSVM discrete one-vs-one majority voting (SVC.predict), whereas Phase D utilized continuous decision margin argmax (np.argmax(pipeline.decision_function(X), axis=1)). On 95.16% of samples, both rules yield identical predictions. On 4.84% of samples with split binary votes, continuous margin argmax breaks ties via distance to margin."
+  },
+  "leakage_safeguards": {
+    "outer_loso_splits_disjoint": true,
+    "inner_oof_splits_disjoint": true,
+    "scaler_fitted_on_training_only": true,
+    "calibrator_fitted_on_training_only": true,
+    "channel_selection_fitted_on_training_only": true,
+    "test_subject_excluded_from_thresholds": true
+  },
+  "channel_selection_integrity": {
+    "channel_differences_against_phase_c": {
+      "all_62": 0,
+      "pred_32": 0,
+      "stab_32": 0,
+      "pred_12": 0
+    },
+    "indivisible_grouping_preserved": true
+  },
+  "metric_integrity": {
+    "probability_sum_max_deviation": 5.551115123125783e-16,
+    "probability_argmax_mismatches": 0,
+    "u_max_formula_max_deviation": 1.1102230246251565e-16,
+    "unit_tests_passed": 29,
+    "unit_tests_failed": 0
+  },
+  "key_metrics": {
+    "all_62_uncal_ece": 0.2785434297043781,
+    "all_62_temp_ece": 0.0373926071261568,
+    "stab_32_temp_ece": 0.0155850301596439,
+    "pred_32_temp_ece": 0.0192423500782953,
+    "pred_12_temp_ece": 0.0132269926792292,
+    "stab_32_subject_auroc_umax_mean": 0.6096308892494018,
+    "stab_32_subject_auroc_umax_std": 0.09527408944546
+  }
+}

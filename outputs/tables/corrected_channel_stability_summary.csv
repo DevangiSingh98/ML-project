@@ -1,0 +1,6 @@
+budget,corrected_stability_jaccard,legacy_stability_jaccard,predictive_importance_jaccard,mean_corrected_vs_legacy_overlap
+8,0.230944,0.278952,0.259665,0.775
+12,0.262237,0.285072,0.301015,0.811111
+16,0.303127,0.328629,0.32885,0.825
+24,0.397641,0.420433,0.421006,0.877778
+32,0.469102,0.492017,0.486585,0.902083

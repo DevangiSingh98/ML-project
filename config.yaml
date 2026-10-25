@@ -1,0 +1,86 @@
+# Configuration for Reliable Subject-Independent EEG Emotion Recognition
+# Using Stable Channel Selection and Uncertainty-Aware Prediction
+
+project:
+  name: "reliable-eeg-emotion-recognition"
+  research_question: "Can we reduce the number of EEG channels while maintaining subject-independent emotion-recognition performance, and use uncertainty estimation to identify and abstain from unreliable predictions on unseen subjects?"
+  random_seed: 42
+
+dataset:
+  name: "SEED-IV"
+  # Configurable path (relative to project root by default; override via CLI or env if needed)
+  data_dir: "SEED_IV"
+  feature_type: "de_LDS"  # Differential Entropy smoothed via Linear Dynamic Systems
+  sessions: [1, 2, 3]     # All three experimental sessions pooled
+  sample_granularity: "window"  # Individual 4-second sliding EEG windows
+  window_length_seconds: 4
+  num_subjects: 15
+  num_sessions: 3
+  trials_per_session: 24
+  total_channels: 62
+  frequency_bands:
+    - "delta"   # 1-4 Hz
+    - "theta"   # 4-8 Hz
+    - "alpha"   # 8-14 Hz
+    - "beta"    # 14-31 Hz
+    - "gamma"   # 31-50 Hz
+  num_frequency_bands: 5
+  total_features: 310  # 62 channels * 5 frequency bands
+  classes:
+    0: "neutral"
+    1: "sad"
+    2: "fear"
+    3: "happy"
+
+evaluation:
+  strategy: "LOSO"  # Outer Leave-One-Subject-Out cross-validation
+  outer_folds: 15
+  inner_cv_folds: 5 # GroupKFold on outer training subjects for hyperparameter tuning and stability
+  inner_group_key: "subject_id"
+
+model:
+  type: "RBF-SVM"
+  kernel: "rbf"
+  c_values: [0.01, 0.1, 1.0, 10.0, 100.0]
+  gamma_values: ["scale", "auto", 0.001, 0.01, 0.1]
+  # Calibration setting: strictly subject-grouped out-of-fold calibration
+  calibration:
+    method: "sigmoid"  # Platt scaling
+    group_key: "subject_id"
+    use_group_safe_oof: true
+
+channel_reduction:
+  mandatory: true
+  budgets: [8, 12, 16, 24, 32, 62]  # Channel counts k, plus all 62 channels
+  features_per_channel: 5           # Grouped channel selection: k * 5 features
+  methods:
+    - "all"                  # 62 channels baseline
+    - "random"               # Repeated random channel selection
+    - "predictive_importance" # Grouped permutation importance on training validation
+    - "stability_aware"      # Utility + selection stability across inner splits (Q_c = alpha*I_c + beta*S_c)
+  random_repeats: 5          # Number of random draws for distribution estimation
+  stability_weights:
+    alpha: 0.5  # Weight for predictive importance
+    beta: 0.5   # Weight for selection stability
+
+uncertainty:
+  mandatory: true
+  measures:
+    - "max_probability"  # u_max = 1 - max(p_k)
+    - "entropy"          # H(p) = -sum(p_k * log(p_k))
+
+selective_prediction:
+  coverage_levels: [1.0, 0.9, 0.8, 0.7, 0.6, 0.5]  # Retention percentages evaluated
+  abstention_policy: "threshold_on_uncertainty"
+
+compute:
+  device: "cpu"
+  n_jobs: -1  # Utilize available CPU logical threads (up to 12)
+
+paths:
+  outputs_dir: "outputs"
+  tables_dir: "outputs/tables"
+  predictions_dir: "outputs/predictions"
+  metrics_dir: "outputs/metrics"
+  figures_dir: "outputs/figures"
+  report_dir: "report"

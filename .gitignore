@@ -1,0 +1,33 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+
+# IDE & OS files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+desktop.ini
+*.swp
+*.swo
+
+# Datasets & raw EEG files (large binary data)
+SEED_IV/
+data/
+datasets/
+*.mat
+*.edf
+*.bdf
+*.fif
+
+# Huge outputs exceeding GitHub file size limits (>100MB)
+outputs/predictions/phase_d_calibrated_predictions.csv
